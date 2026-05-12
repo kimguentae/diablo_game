@@ -20,28 +20,39 @@ const countEl = document.getElementById("count");
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
 /* =========================
-   PLAYER
+   PLAYER UI
 ========================= */
 function updateCount(){
   countEl.innerText = players.filter(p=>p.active).length;
 }
 
+/* DOM 저장용 */
+const domMap = new Map();
+
+/* =========================
+   선수 생성
+========================= */
 players.forEach(p=>{
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
 
+  domMap.set(p.name, div);
+
   div.onclick = ()=>{
+
     p.active = !p.active;
     div.classList.toggle("active");
     updateCount();
+
+    reorder(); // 🔥 핵심
   };
 
   listEl.appendChild(div);
 });
 
 /* =========================
-   🔥 GUEST (+ 버튼)
+   🔥 게스트 (+)
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
@@ -58,17 +69,44 @@ guest.onclick = ()=>{
   div.className = "player active";
   div.innerText = name;
 
+  domMap.set(name, div);
+
   div.onclick = ()=>{
     p.active = !p.active;
     div.classList.toggle("active");
     updateCount();
+    reorder();
   };
 
   listEl.appendChild(div);
   updateCount();
+  reorder();
 };
 
 listEl.appendChild(guest);
+
+/* =========================
+   🔥 핵심: 선택자 상단 정렬
+========================= */
+function reorder(){
+
+  const active = [];
+  const inactive = [];
+
+  players.forEach(p=>{
+    const el = domMap.get(p.name);
+    if(!el) return;
+
+    if(p.active) active.push(el);
+    else inactive.push(el);
+  });
+
+  listEl.innerHTML = "";
+
+  active.forEach(el=> listEl.appendChild(el));
+  inactive.forEach(el=> listEl.appendChild(el));
+  listEl.appendChild(guest);
+}
 
 /* =========================
    GAME
