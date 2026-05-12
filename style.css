@@ -50,16 +50,16 @@ h2 {
 }
 
 /* =========================
-   FIXED PAIR (요청 반영 핵심)
+   FIXED PAIR (5열 구조)
 ========================= */
 .pairBox {
   display: grid;
-  grid-template-columns: 0.8fr 0.8fr 0.4fr;
+  grid-template-columns: repeat(5, 1fr);
   gap: 4px;
   margin-bottom: 10px;
 }
 
-/* select */
+/* select = PLAYER 느낌 + 5열 대응 */
 .pairBox select {
   background: #1c1c1c;
   color: #fff;
@@ -67,9 +67,9 @@ h2 {
   border-radius: 6px;
 
   font-size: 9px;
-  height: 30px;
-  padding: 0;
+  height: 34px;
 
+  padding: 0;
   text-align: center;
   text-align-last: center;
 
@@ -83,7 +83,8 @@ h2 {
   justify-content: center;
 
   font-size: 12px;
-  height: 30px;
+  height: 34px;
+
   border: 1px dashed #555;
   border-radius: 6px;
 
