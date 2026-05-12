@@ -5,17 +5,14 @@ body {
   padding: 20px;
 }
 
-/* 🔥 제목 가운데 */
 h1 {
   text-align: center;
   font-size: 22px;
-  margin-bottom: 25px;
 }
 
 h2 {
   font-size: 16px;
   color: #bbb;
-  margin-top: 20px;
 }
 
 /* 참석자 */
@@ -28,6 +25,7 @@ h2 {
   min-height: 120px;
 }
 
+/* 카드 */
 .player {
   background: #1c1c1c;
   padding: 10px;
@@ -35,7 +33,6 @@ h2 {
   min-width: 110px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid #222;
 }
 
 .player.active {
@@ -43,12 +40,18 @@ h2 {
   color: #000;
 }
 
-/* 버튼 */
-.genBtn {
-  width: 100%;
+/* 🔥 GAME 버튼 가로 */
+.btnRow {
+  display: flex;
+  gap: 6px;
   margin-top: 10px;
-  padding: 14px;
-  border-radius: 10px;
+}
+
+.genBtn {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 6px;
   border: none;
   background: #2979ff;
   color: white;
