@@ -1,5 +1,4 @@
 const COURTS = ["A", "B", "C"];
-const COLORS = ["red","blue","green","yellow","purple"];
 
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
@@ -11,8 +10,7 @@ const names = [
 
 const players = names.map(n => ({
   name: n,
-  active: false,
-  color: null
+  active: false
 }));
 
 const listEl = document.getElementById("playerList");
@@ -21,37 +19,31 @@ const countEl = document.getElementById("count");
 
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
-let pressTimer = null;
-
 /* =========================
-   COUNT
+   PLAYER
 ========================= */
 function updateCount(){
   countEl.innerText = players.filter(p=>p.active).length;
 }
 
-/* =========================
-   DOM MAP
-========================= */
-const domMap = new Map();
-
-/* =========================
-   PLAYER 생성
-========================= */
 players.forEach(p=>{
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
 
-  domMap.set(p.name, div);
+  div.onclick = ()=>{
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
 
-  attachTouch(div, p);
+    reorder();
+  };
 
   listEl.appendChild(div);
 });
 
 /* =========================
-   GUEST
+   GUEST (+)
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
@@ -61,16 +53,19 @@ guest.onclick = ()=>{
   const name = prompt("GUEST NAME");
   if(!name) return;
 
-  const p = {name, active:true, color:null};
+  const p = {name, active:true};
   players.push(p);
 
   const div = document.createElement("div");
   div.className = "player active";
   div.innerText = name;
 
-  domMap.set(name, div);
-
-  attachTouch(div, p);
+  div.onclick = ()=>{
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
+    reorder();
+  };
 
   listEl.appendChild(div);
   updateCount();
@@ -80,85 +75,16 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   🔥 핵심: 클릭 + 롱프레스 분리
-========================= */
-function attachTouch(div, player){
-
-  let startX = 0;
-  let startY = 0;
-  let moved = false;
-
-  const start = (e) => {
-
-    const t = e.touches ? e.touches[0] : null;
-
-    startX = t ? t.clientX : 0;
-    startY = t ? t.clientY : 0;
-
-    moved = false;
-
-    pressTimer = setTimeout(()=>{
-      changeColor(div, player);
-    }, 600);
-  };
-
-  const move = (e) => {
-    const t = e.touches ? e.touches[0] : null;
-    if(!t) return;
-
-    if(Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10){
-      moved = true;
-      clearTimeout(pressTimer);
-    }
-  };
-
-  const end = () => {
-    clearTimeout(pressTimer);
-
-    // 🔥 짧게 누른 경우만 클릭 처리
-    if(!moved){
-      player.active = !player.active;
-      div.classList.toggle("active");
-      updateCount();
-      reorder();
-    }
-  };
-
-  div.addEventListener("touchstart", start, { passive: true });
-  div.addEventListener("touchmove", move, { passive: true });
-  div.addEventListener("touchend", end);
-
-  div.addEventListener("mousedown", start);
-  div.addEventListener("mouseup", end);
-
-  div.addEventListener("contextmenu", e => e.preventDefault());
-  div.setAttribute("draggable", "false");
-}
-
-/* =========================
-   색 변경
-========================= */
-function changeColor(div, player){
-
-  let idx = COLORS.indexOf(player.color);
-  idx = (idx + 1) % COLORS.length;
-
-  COLORS.forEach(c => div.classList.remove(c));
-
-  player.color = COLORS[idx];
-  div.classList.add(player.color);
-}
-
-/* =========================
-   정렬
+   선택자 상단 정렬
 ========================= */
 function reorder(){
-
   const active = [];
   const inactive = [];
 
   players.forEach(p=>{
-    const el = domMap.get(p.name);
+    const el = Array.from(listEl.children)
+      .find(d => d.innerText === p.name);
+
     if(!el) return;
 
     if(p.active) active.push(el);
@@ -173,11 +99,12 @@ function reorder(){
 }
 
 /* =========================
-   GAME (고정페어)
+   GAME
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
 
+    const setNo = +btn.dataset.set;
     const available = players.filter(p=>p.active);
 
     if(available.length < 4){
@@ -185,42 +112,27 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
       return;
     }
 
-    let grouped = {};
+    let pool = [...available];
+    shuffle(pool);
 
-    available.forEach(p=>{
-      let key = p.color || "none";
-      if(!grouped[key]) grouped[key] = [];
-      grouped[key].push(p);
-    });
-
-    let pairs = [];
-
-    Object.values(grouped).forEach(group=>{
-      shuffle(group);
-
-      for(let i=0;i<group.length;i+=2){
-        if(group[i+1]){
-          pairs.push(group[i], group[i+1]);
-        }
-      }
-    });
-
-    shuffle(pairs);
-
+    let used = new Set();
     let matches = [];
 
     for(let i=0;i<COURTS.length;i++){
-      if(pairs.length < 4) break;
+      let team = [];
 
-      matches.push([
-        pairs.shift(),
-        pairs.shift(),
-        pairs.shift(),
-        pairs.shift()
-      ]);
+      while(team.length<4 && pool.length){
+        const p = pool.shift();
+        if(!used.has(p.name)){
+          used.add(p.name);
+          team.push(p);
+        }
+      }
+
+      if(team.length===4) matches.push(team);
     }
 
-    setStore[btn.dataset.set] = matches;
+    setStore[setNo] = matches;
     render();
   };
 });
@@ -229,7 +141,6 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
    RESULT
 ========================= */
 function render(){
-
   resultEl.innerHTML = "";
 
   for(let s=1;s<=5;s++){
