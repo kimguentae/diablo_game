@@ -6,35 +6,49 @@ body {
   font-family: sans-serif;
 }
 
-h1 { text-align: center; font-size: 18px; }
-h2 { font-size: 12px; color: #aaa; }
+h1 {
+  text-align: center;
+  font-size: 18px;
+}
 
-/* 5열 */
+h2 {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* =========================
+   5열 PLAYER
+========================= */
 #playerList {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
 }
 
-/* 카드 */
+/* =========================
+   PLAYER 카드 + 눌림 효과
+========================= */
 .player {
-  position: relative;
   background: #1c1c1c;
   border-radius: 6px;
   font-size: 10px;
   text-align: center;
-  padding: 18px 2px 8px;
+  padding: 8px 2px;
   border: 1px solid #222;
+
   user-select: none;
 
-  transition: transform 0.08s ease;
+  /* 🔥 핵심: 눌림 애니메이션 */
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .player:active {
   transform: scale(0.92);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
 }
 
-/* 활성 */
+/* 선택 상태 */
 .player.active {
   background: #00c853;
   color: #000;
@@ -46,17 +60,9 @@ h2 { font-size: 12px; color: #aaa; }
   color: #888;
 }
 
-/* 🔴 색 점 */
-.dot {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-/* GAME */
+/* =========================
+   GAME 버튼
+========================= */
 .btnRow {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -72,7 +78,9 @@ h2 { font-size: 12px; color: #aaa; }
   color: white;
 }
 
-/* 결과 */
+/* =========================
+   RESULT
+========================= */
 .result-set {
   margin-top: 8px;
   padding: 8px;
