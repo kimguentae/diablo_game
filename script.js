@@ -17,11 +17,10 @@ const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 const countEl = document.getElementById("count");
 
-// 🔥 세트 고정
 const setStore = { 1:null, 2:null, 3:null, 4:null, 5:null };
 
 /* =========================
-   참석자 UI
+   참석자
 ========================= */
 function updateCount() {
   countEl.innerText = players.filter(p => p.active).length;
@@ -42,14 +41,13 @@ players.forEach(p => {
 });
 
 /* =========================
-   🔥 게스트 칸 복구
+   🔥 게스트 (한번 클릭)
 ========================= */
 const guest = document.createElement("div");
-guest.className = "player";
-guest.style.border = "2px dashed #555";
+guest.className = "player guest";
 guest.innerText = "+ GUEST";
 
-guest.ondblclick = () => {
+guest.onclick = () => {
   const name = prompt("게스트 이름");
   if (!name) return;
 
@@ -73,14 +71,13 @@ guest.ondblclick = () => {
 listEl.appendChild(guest);
 
 /* =========================
-   GAME 버튼
+   GAME
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn => {
   btn.onclick = () => {
     const setNo = Number(btn.dataset.set);
 
     const available = players.filter(p => p.active);
-
     if (available.length < 4) {
       alert("인원 부족");
       return;
@@ -112,7 +109,7 @@ document.querySelectorAll(".genBtn").forEach(btn => {
 });
 
 /* =========================
-   🔥 결과 고정 출력 (1~5세트)
+   결과 (대기 없음)
 ========================= */
 function renderGames() {
   resultEl.innerHTML = "";
@@ -123,17 +120,15 @@ function renderGames() {
     const div = document.createElement("div");
     div.className = "result-set";
 
-    if (!data) {
-      div.innerHTML = `<b>(${s}세트)</b><br>대기`;
-    } else {
+    if (data) {
       div.innerHTML =
         `<b>(${s}세트)</b><br>` +
         data.map((t, i) =>
           `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
         ).join("<br>");
-    }
 
-    resultEl.appendChild(div);
+      resultEl.appendChild(div);
+    }
   }
 }
 
