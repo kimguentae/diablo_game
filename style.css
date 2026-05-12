@@ -5,9 +5,7 @@ body {
   padding: 20px;
 }
 
-h1 {
-  font-size: 20px;
-}
+h1 { font-size: 20px; }
 
 h2 {
   margin-top: 20px;
@@ -15,7 +13,6 @@ h2 {
   color: #bbb;
 }
 
-/* 카드 영역 */
 #playerList {
   display: flex;
   flex-wrap: wrap;
@@ -25,7 +22,7 @@ h2 {
   min-height: 120px;
 }
 
-/* 일반 선수 카드 */
+/* 플레이어 카드 */
 .player {
   background: #1c1c1c;
   padding: 10px;
@@ -34,41 +31,33 @@ h2 {
   text-align: center;
   cursor: pointer;
   border: 1px solid #222;
-  transition: 0.2s;
 }
 
 .player.active {
   background: #00c853;
   color: #000;
-  font-weight: bold;
 }
 
-/* 🔥 게스트 추가용 빈 박스 */
+/* 게스트 */
 .guest-box {
-  background: transparent;
   border: 2px dashed #444;
   color: #777;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.guest-box:hover {
-  border-color: #888;
-  color: #ccc;
 }
 
 /* 버튼 */
-button {
+.genBtn {
   width: 100%;
-  margin-top: 20px;
-  padding: 15px;
-  font-size: 16px;
+  margin-top: 10px;
+  padding: 14px;
   border-radius: 10px;
   border: none;
   background: #2979ff;
   color: white;
   cursor: pointer;
+}
+
+.genBtn:hover {
+  background: #1c5fd6;
 }
 
 /* 결과 */
