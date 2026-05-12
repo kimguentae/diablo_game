@@ -1,115 +1,95 @@
 body {
   margin: 0;
-  padding: 10px;
-  background: #000;
-  color: #fff;
-  font-family: sans-serif;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f172a;
+  color: #ffffff;
 }
 
 h1 {
   text-align: center;
   font-size: 18px;
+  margin-bottom: 16px;
 }
 
-h2 {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 14px;
+.section-title {
+  font-size: 14px;
+  margin: 14px 0 8px;
 }
 
-/* PLAYER 5열 */
-#playerList {
+.grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
-}
-
-.player {
-  background: #1c1c1c;
-  border-radius: 6px;
-  font-size: 10px;
-  text-align: center;
-  padding: 10px 2px;
-  border: 1px solid #222;
-  user-select: none;
-  transition: transform 0.08s ease;
-}
-
-.player:active {
-  transform: scale(0.92);
-}
-
-.player.active {
-  background: #00c853;
-  color: #000;
-}
-
-.player.guest {
-  border: 1px dashed #555;
-  color: #888;
-}
-
-/* FIXED PAIR */
-#pairList {
-  display: flex;
-  flex-direction: column;
   gap: 6px;
 }
 
-.pairItem {
-  background: #111;
-  padding: 6px;
+.player-btn,
+.add-btn {
+  background: #1e293b;
   border-radius: 6px;
-  font-size: 11px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pairItem span {
-  color: #00c853;
-}
-
-.pairItem button {
-  background: #ff5252;
-  border: none;
-  color: #fff;
-  font-size: 10px;
-  border-radius: 4px;
-  padding: 2px 6px;
-}
-
-/* + 버튼 */
-.pairAdd {
-  margin-top: 6px;
+  padding: 14px 0;
+  font-size: 13px;
   text-align: center;
+  user-select: none;
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.player-btn:active {
+  transform: scale(0.94);
+  background: #334155;
+}
+
+.add-btn {
+  background: #334155;
+  font-weight: bold;
+}
+
+.fixed-box {
+  background: #020617;
   padding: 10px;
-  border: 1px dashed #555;
-  border-radius: 6px;
+  border-radius: 8px;
+}
+
+.pair {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 90%;
+  background: #020617;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.modal-content h3 {
   font-size: 14px;
+  margin-bottom: 10px;
 }
 
-/* GAME */
-.btnRow {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
-}
-
-.genBtn {
-  font-size: 10px;
-  padding: 10px 0;
-  border: none;
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
   border-radius: 6px;
-  background: #2979ff;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  background: #2563eb;
   color: white;
-}
-
-/* RESULT */
-.result-set {
-  margin-top: 8px;
-  padding: 8px;
-  background: #111;
-  border-radius: 6px;
-  font-size: 11px;
+  border: none;
 }
