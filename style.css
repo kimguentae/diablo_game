@@ -7,7 +7,6 @@ body {
 
 h1 {
   font-size: 20px;
-  margin-bottom: 20px;
 }
 
 h2 {
@@ -16,7 +15,7 @@ h2 {
   color: #bbb;
 }
 
-/* 🔥 카드 리스트 (처음 스타일 느낌) */
+/* 카드 영역 */
 #playerList {
   display: flex;
   flex-wrap: wrap;
@@ -26,25 +25,37 @@ h2 {
   min-height: 120px;
 }
 
+/* 일반 선수 카드 */
 .player {
   background: #1c1c1c;
   padding: 10px;
   border-radius: 10px;
-  cursor: pointer;
   min-width: 110px;
   text-align: center;
-  transition: 0.2s;
+  cursor: pointer;
   border: 1px solid #222;
-}
-
-.player:hover {
-  transform: scale(1.05);
+  transition: 0.2s;
 }
 
 .player.active {
   background: #00c853;
   color: #000;
   font-weight: bold;
+}
+
+/* 🔥 게스트 추가용 빈 박스 */
+.guest-box {
+  background: transparent;
+  border: 2px dashed #444;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guest-box:hover {
+  border-color: #888;
+  color: #ccc;
 }
 
 /* 버튼 */
