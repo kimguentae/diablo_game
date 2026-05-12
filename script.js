@@ -1,5 +1,8 @@
 const COURTS = ["A", "B", "C"];
 
+const COLORS = ["red","blue","green","yellow","purple"];
+let pressTimer;
+
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
   "박종성","김준현","송지훈","박정규","김동현","유세호",
@@ -10,7 +13,8 @@ const names = [
 
 const players = names.map(n => ({
   name: n,
-  active: false
+  active: false,
+  color: null
 }));
 
 const listEl = document.getElementById("playerList");
@@ -20,30 +24,41 @@ const countEl = document.getElementById("count");
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
 /* =========================
-   PLAYER
+   COUNT
 ========================= */
 function updateCount(){
   countEl.innerText = players.filter(p=>p.active).length;
 }
 
+/* =========================
+   PLAYER MAP
+========================= */
+const domMap = new Map();
+
+/* =========================
+   PLAYER 생성
+========================= */
 players.forEach(p=>{
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
 
+  domMap.set(p.name, div);
+
   div.onclick = ()=>{
     p.active = !p.active;
     div.classList.toggle("active");
     updateCount();
-
     reorder();
   };
+
+  attachPress(div, p);
 
   listEl.appendChild(div);
 });
 
 /* =========================
-   GUEST (+)
+   GUEST
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
@@ -53,12 +68,14 @@ guest.onclick = ()=>{
   const name = prompt("GUEST NAME");
   if(!name) return;
 
-  const p = {name, active:true};
+  const p = {name, active:true, color:null};
   players.push(p);
 
   const div = document.createElement("div");
   div.className = "player active";
   div.innerText = name;
+
+  domMap.set(name, div);
 
   div.onclick = ()=>{
     p.active = !p.active;
@@ -66,6 +83,8 @@ guest.onclick = ()=>{
     updateCount();
     reorder();
   };
+
+  attachPress(div, p);
 
   listEl.appendChild(div);
   updateCount();
@@ -75,16 +94,52 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   선택자 상단 정렬
+   🔥 롱프레스 (색 변경)
+========================= */
+function attachPress(div, player){
+
+  div.addEventListener("mousedown", start);
+  div.addEventListener("touchstart", start);
+
+  div.addEventListener("mouseup", end);
+  div.addEventListener("mouseleave", end);
+  div.addEventListener("touchend", end);
+
+  function start(){
+    pressTimer = setTimeout(()=>{
+      changeColor(div, player);
+    }, 600);
+  }
+
+  function end(){
+    clearTimeout(pressTimer);
+  }
+}
+
+/* =========================
+   색 변경
+========================= */
+function changeColor(div, player){
+
+  let idx = COLORS.indexOf(player.color);
+  idx = (idx + 1) % COLORS.length;
+
+  COLORS.forEach(c => div.classList.remove(c));
+
+  player.color = COLORS[idx];
+  div.classList.add(player.color);
+}
+
+/* =========================
+   🔥 선택자 상단 정렬
 ========================= */
 function reorder(){
+
   const active = [];
   const inactive = [];
 
   players.forEach(p=>{
-    const el = Array.from(listEl.children)
-      .find(d => d.innerText === p.name);
-
+    const el = domMap.get(p.name);
     if(!el) return;
 
     if(p.active) active.push(el);
@@ -93,18 +148,17 @@ function reorder(){
 
   listEl.innerHTML = "";
 
-  active.forEach(el => listEl.appendChild(el));
-  inactive.forEach(el => listEl.appendChild(el));
+  active.forEach(el=>listEl.appendChild(el));
+  inactive.forEach(el=>listEl.appendChild(el));
   listEl.appendChild(guest);
 }
 
 /* =========================
-   GAME
+   GAME (고정페어 포함)
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
 
-    const setNo = +btn.dataset.set;
     const available = players.filter(p=>p.active);
 
     if(available.length < 4){
@@ -112,27 +166,43 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
       return;
     }
 
-    let pool = [...available];
-    shuffle(pool);
+    // 🔥 색 기준 고정페어
+    let grouped = {};
 
-    let used = new Set();
+    available.forEach(p=>{
+      let key = p.color || "none";
+      if(!grouped[key]) grouped[key] = [];
+      grouped[key].push(p);
+    });
+
+    let pairs = [];
+
+    Object.values(grouped).forEach(group=>{
+      shuffle(group);
+
+      for(let i=0;i<group.length;i+=2){
+        if(group[i+1]){
+          pairs.push(group[i], group[i+1]);
+        }
+      }
+    });
+
+    shuffle(pairs);
+
     let matches = [];
 
     for(let i=0;i<COURTS.length;i++){
-      let team = [];
+      if(pairs.length < 4) break;
 
-      while(team.length<4 && pool.length){
-        const p = pool.shift();
-        if(!used.has(p.name)){
-          used.add(p.name);
-          team.push(p);
-        }
-      }
-
-      if(team.length===4) matches.push(team);
+      matches.push([
+        pairs.shift(),
+        pairs.shift(),
+        pairs.shift(),
+        pairs.shift()
+      ]);
     }
 
-    setStore[setNo] = matches;
+    setStore[btn.dataset.set] = matches;
     render();
   };
 });
@@ -141,6 +211,7 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
    RESULT
 ========================= */
 function render(){
+
   resultEl.innerHTML = "";
 
   for(let s=1;s<=5;s++){
