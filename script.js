@@ -1,5 +1,4 @@
 const COURTS = ["A", "B", "C"];
-const COLORS = ["red","blue","green","yellow","purple"];
 
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
@@ -8,6 +7,8 @@ const names = [
   "최성욱","이진우","이현철","정상돈","최부승","최선우",
   "이명진","전유준","성제현","장이현"
 ];
+
+let selectedColor = null;
 
 const players = names.map(n => ({
   name: n,
@@ -20,6 +21,15 @@ const resultEl = document.getElementById("result");
 const countEl = document.getElementById("count");
 
 const setStore = {1:null,2:null,3:null,4:null,5:null};
+
+/* =========================
+   COLOR SELECT
+========================= */
+document.querySelectorAll(".colorBar button").forEach(btn=>{
+  btn.onclick = ()=>{
+    selectedColor = btn.dataset.c;
+  };
+});
 
 /* =========================
    COUNT
@@ -41,11 +51,25 @@ players.forEach(p=>{
   div.className = "player";
   div.innerText = p.name;
 
-  div.setAttribute("draggable", "false");
-
   domMap.set(p.name, div);
 
-  attachPointer(div, p);
+  div.onclick = ()=>{
+
+    p.active = !p.active;
+
+    // 🔥 선택
+    div.classList.toggle("active");
+
+    // 🔥 색 적용
+    if(selectedColor){
+      div.classList.remove("red","yellow","white","green");
+      div.classList.add(selectedColor);
+      p.color = selectedColor;
+    }
+
+    updateCount();
+    reorder();
+  };
 
   listEl.appendChild(div);
 });
@@ -54,7 +78,7 @@ players.forEach(p=>{
    GUEST
 ========================= */
 const guest = document.createElement("div");
-guest.className = "player guest";
+guest.className = "player";
 guest.innerText = "+";
 
 guest.onclick = ()=>{
@@ -68,9 +92,14 @@ guest.onclick = ()=>{
   div.className = "player active";
   div.innerText = name;
 
-  attachPointer(div, p);
-
   domMap.set(name, div);
+
+  div.onclick = ()=>{
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
+    reorder();
+  };
 
   listEl.appendChild(div);
   updateCount();
@@ -78,73 +107,6 @@ guest.onclick = ()=>{
 };
 
 listEl.appendChild(guest);
-
-/* =========================
-   🔥 POINTER 핵심 로직
-========================= */
-function attachPointer(div, player){
-
-  let timer = null;
-  let startX = 0;
-  let startY = 0;
-  let moved = false;
-
-  div.style.touchAction = "none";
-
-  div.addEventListener("pointerdown", (e)=>{
-
-    startX = e.clientX;
-    startY = e.clientY;
-    moved = false;
-
-    timer = setTimeout(()=>{
-      changeColor(div, player);
-    }, 600);
-  });
-
-  div.addEventListener("pointermove", (e)=>{
-
-    if(Math.abs(e.clientX - startX) > 10 ||
-       Math.abs(e.clientY - startY) > 10){
-      moved = true;
-      clearTimeout(timer);
-    }
-
-  });
-
-  div.addEventListener("pointerup", ()=>{
-
-    clearTimeout(timer);
-
-    if(!moved){
-      player.active = !player.active;
-      div.classList.toggle("active");
-      updateCount();
-      reorder();
-    }
-
-  });
-
-  div.addEventListener("pointercancel", ()=>{
-    clearTimeout(timer);
-  });
-
-  div.addEventListener("contextmenu", e => e.preventDefault());
-}
-
-/* =========================
-   색 변경
-========================= */
-function changeColor(div, player){
-
-  let idx = COLORS.indexOf(player.color);
-  idx = (idx + 1) % COLORS.length;
-
-  COLORS.forEach(c => div.classList.remove(c));
-
-  player.color = COLORS[idx];
-  div.classList.add(player.color);
-}
 
 /* =========================
    정렬
@@ -164,8 +126,8 @@ function reorder(){
 
   listEl.innerHTML = "";
 
-  active.forEach(el => listEl.appendChild(el));
-  inactive.forEach(el => listEl.appendChild(el));
+  active.forEach(el=>listEl.appendChild(el));
+  inactive.forEach(el=>listEl.appendChild(el));
   listEl.appendChild(guest);
 }
 
@@ -182,38 +144,18 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
       return;
     }
 
-    let grouped = {};
-
-    available.forEach(p=>{
-      let key = p.color || "none";
-      if(!grouped[key]) grouped[key] = [];
-      grouped[key].push(p);
-    });
-
-    let pairs = [];
-
-    Object.values(grouped).forEach(group=>{
-      shuffle(group);
-
-      for(let i=0;i<group.length;i+=2){
-        if(group[i+1]){
-          pairs.push(group[i], group[i+1]);
-        }
-      }
-    });
-
-    shuffle(pairs);
+    shuffle(available);
 
     let matches = [];
 
     for(let i=0;i<COURTS.length;i++){
-      if(pairs.length < 4) break;
+      if(available.length < 4) break;
 
       matches.push([
-        pairs.shift(),
-        pairs.shift(),
-        pairs.shift(),
-        pairs.shift()
+        available.pop(),
+        available.pop(),
+        available.pop(),
+        available.pop()
       ]);
     }
 
