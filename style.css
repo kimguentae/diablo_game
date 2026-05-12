@@ -26,7 +26,7 @@ h2 {
 }
 
 /* =========================
-   PLAYER (완전 터치 안정)
+   PLAYER 카드 + 눌림 효과
 ========================= */
 .player {
   background: #1c1c1c;
@@ -36,14 +36,11 @@ h2 {
   padding: 8px 2px;
   border: 1px solid #222;
 
-  /* 🔥 핵심: 모바일 드래그 완전 차단 */
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  -webkit-touch-callout: none !important;
+  user-select: none;
 
-  touch-action: manipulation;
-
+  /* 🔥 핵심: 눌림 애니메이션 */
   transition: transform 0.08s ease, box-shadow 0.08s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .player:active {
@@ -51,21 +48,20 @@ h2 {
   box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
 }
 
+/* 선택 상태 */
 .player.active {
   background: #00c853;
   color: #000;
 }
 
-/* =========================
-   GUEST
-========================= */
+/* 게스트 */
 .player.guest {
   border: 1px dashed #555;
   color: #888;
 }
 
 /* =========================
-   GAME BUTTON
+   GAME 버튼
 ========================= */
 .btnRow {
   display: grid;
@@ -92,27 +88,3 @@ h2 {
   border-radius: 6px;
   font-size: 11px;
 }
-
-/* =========================
-   COLOR DOT
-========================= */
-.player {
-  position: relative;
-}
-
-.player::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: transparent;
-}
-
-.player.red::after { background: red; }
-.player.blue::after { background: blue; }
-.player.green::after { background: green; }
-.player.yellow::after { background: yellow; }
-.player.purple::after { background: purple; }
