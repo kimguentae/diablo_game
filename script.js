@@ -19,9 +19,9 @@ const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 
 /* =========================
-   이름 카드 UI
+   카드 렌더
 ========================= */
-players.forEach(p => {
+function renderPlayer(p) {
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
@@ -32,15 +32,50 @@ players.forEach(p => {
   };
 
   listEl.appendChild(div);
-});
+}
+
+players.forEach(renderPlayer);
+
+/* =========================
+   🔥 게스트 박스 추가
+========================= */
+function createGuestBox() {
+  const box = document.createElement("div");
+  box.className = "player guest-box";
+  box.innerText = "+ 게스트";
+
+  box.ondblclick = () => {
+    const name = prompt("게스트 이름 입력");
+    if (!name) return;
+
+    const p = { name, active: true };
+    players.push(p);
+
+    const div = document.createElement("div");
+    div.className = "player active";
+    div.innerText = name;
+
+    div.onclick = () => {
+      p.active = !p.active;
+      div.classList.toggle("active");
+    };
+
+    listEl.insertBefore(div, box);
+  };
+
+  listEl.appendChild(box);
+}
+
+createGuestBox();
 
 /* =========================
    고정페어 (더블클릭)
 ========================= */
-listEl.ondblclick = () => {
+listEl.ondblclick = (e) => {
+  if (e.target.classList.contains("player")) return;
+
   const a = prompt("첫 번째 이름");
   const b = prompt("두 번째 이름");
-
   if (!a || !b) return;
 
   fixedPairs.push([a, b]);
@@ -48,64 +83,53 @@ listEl.ondblclick = () => {
 };
 
 /* =========================
-   경기 자동편성 (1세트)
+   5세트 자동 생성
 ========================= */
 document.getElementById("generateBtn").onclick = () => {
   resultEl.innerHTML = "";
 
-  let available = players.filter(p => p.active);
+  for (let s = 1; s <= 5; s++) {
+    const available = players.filter(p => p.active);
 
-  if (available.length < 4) {
-    alert("인원이 부족합니다");
-    return;
-  }
-
-  let used = new Set();
-  let result = [];
-
-  // 고정페어 우선
-  fixedPairs.forEach(pair => {
-    const p1 = available.find(p => p.name === pair[0]);
-    const p2 = available.find(p => p.name === pair[1]);
-
-    if (p1 && p2 && !used.has(p1.name) && !used.has(p2.name)) {
-      used.add(p1.name);
-      used.add(p2.name);
-      result.push([p1, p2]);
+    if (available.length < 4) {
+      alert("인원 부족");
+      return;
     }
-  });
 
-  // 나머지 랜덤
-  let pool = available.filter(p => !used.has(p.name));
-  shuffle(pool);
+    let used = new Set();
+    let result = [];
 
-  for (let i = 0; i < COURTS.length; i++) {
-    const team = [];
+    let pool = [...available];
 
-    while (team.length < 4 && pool.length > 0) {
-      const p = pool.shift();
-      if (!used.has(p.name)) {
-        used.add(p.name);
-        team.push(p);
+    shuffle(pool);
+
+    for (let i = 0; i < COURTS.length; i++) {
+      const team = [];
+
+      while (team.length < 4 && pool.length > 0) {
+        const p = pool.shift();
+        if (!used.has(p.name)) {
+          used.add(p.name);
+          team.push(p);
+        }
+      }
+
+      if (team.length === 4) {
+        result.push(team);
       }
     }
 
-    if (team.length === 4) {
-      result.push(team);
-    }
-  }
-
-  // 출력
-  result.forEach((r, i) => {
     const div = document.createElement("div");
     div.className = "result-set";
 
     div.innerHTML =
-      `<strong>${COURTS[i]}코트</strong><br>` +
-      r.map(p => p.name).join(" / ");
+      `<strong>(${s}세트)</strong><br>` +
+      result.map((r, i) =>
+        `${COURTS[i]}코트: ${r.map(p => p.name).join(" / ")}`
+      ).join("<br>");
 
     resultEl.appendChild(div);
-  });
+  }
 };
 
 /* =========================
