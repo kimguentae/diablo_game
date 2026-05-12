@@ -1,13 +1,5 @@
 const COURTS = ["A", "B", "C"];
 
-const SETS = [
-  { label: "1세트", start: "20:20", end: "21:00" },
-  { label: "2세트", start: "21:00", end: "21:40" },
-  { label: "3세트", start: "21:40", end: "22:20" },
-  { label: "4세트", start: "22:20", end: "23:00" }
-];
-
-// 기본 명단
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
   "박종성","김준현","송지훈","박정규","김동현","유세호",
@@ -16,146 +8,113 @@ const names = [
   "이명진","전유준","성제현","장이현"
 ];
 
-// 선수 데이터
+// 선수
 const players = names.map(n => ({
   name: n,
-  active: false,
-  leave: "23:00",
-  earlyExit: false,
-  games: 0
+  active: false
 }));
+
+let fixedPairs = [];
 
 const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 
 /* =========================
-   UI 생성
+   UI 생성 (동그란 네모)
 ========================= */
-function renderPlayer(p) {
+players.forEach(p => {
   const div = document.createElement("div");
   div.className = "player";
-
-  div.innerHTML = `
-    <strong>${p.name}</strong>
-    <div class="player-options" style="display:none">
-      ⏰ 퇴장
-      <select>
-        <option>21:00</option>
-        <option>21:40</option>
-        <option>22:20</option>
-        <option selected>23:00</option>
-      </select>
-      <br/>
-      ⚡ 조기퇴장 <input type="checkbox"/>
-    </div>
-  `;
+  div.innerText = p.name;
 
   div.onclick = () => {
     p.active = !p.active;
     div.classList.toggle("active");
-    div.querySelector(".player-options").style.display =
-      p.active ? "block" : "none";
-  };
-
-  div.querySelector("select").onchange = e => {
-    p.leave = e.target.value;
-  };
-
-  div.querySelector("input").onchange = e => {
-    p.earlyExit = e.target.checked;
   };
 
   listEl.appendChild(div);
-}
-
-players.forEach(renderPlayer);
+});
 
 /* =========================
-   게스트 추가 (더블클릭)
+   고정페어 (간단 prompt)
 ========================= */
 listEl.ondblclick = () => {
-  const name = prompt("게스트 이름");
-  if (!name) return;
+  const a = prompt("첫 번째 이름");
+  const b = prompt("두 번째 이름");
 
-  const p = {
-    name,
-    active: true,
-    leave: "23:00",
-    earlyExit: false,
-    games: 0
-  };
+  if (!a || !b) return;
 
-  players.push(p);
-  renderPlayer(p);
+  fixedPairs.push([a, b]);
+  alert(`고정페어 등록: ${a} - ${b}`);
 };
 
 /* =========================
-   경기 생성
+   경기 생성 (1세트)
 ========================= */
 document.getElementById("generateBtn").onclick = () => {
   resultEl.innerHTML = "";
 
-  // 초기화
-  players.forEach(p => p.games = 0);
+  let available = players.filter(p => p.active);
 
-  let prevSetPlayers = [];
+  if (available.length < 4) {
+    alert("인원이 부족합니다");
+    return;
+  }
 
-  SETS.forEach(set => {
+  let used = new Set();
+  let result = [];
 
-    // 현재 가능 인원
-    let available = players.filter(p => p.active);
+  // 고정페어 먼저
+  fixedPairs.forEach(pair => {
+    const p1 = available.find(p => p.name === pair[0]);
+    const p2 = available.find(p => p.name === pair[1]);
 
-    // 우선순위 정렬 (조기퇴장 + 적게 뛴 사람)
-    available.sort((a, b) => {
-      if (a.earlyExit && !b.earlyExit) return -1;
-      if (!a.earlyExit && b.earlyExit) return 1;
-      return a.games - b.games;
-    });
+    if (p1 && p2 && !used.has(p1.name) && !used.has(p2.name)) {
+      used.add(p1.name);
+      used.add(p2.name);
+      result.push([p1, p2]);
+    }
+  });
 
-    const used = new Set();
-    const matches = [];
-    const currentSetPlayers = [];
+  // 나머지 랜덤
+  let pool = available.filter(p => !used.has(p.name));
+  shuffle(pool);
 
-    for (let court of COURTS) {
+  for (let i = 0; i < COURTS.length; i++) {
+    const team = [];
 
-      let pool = available.filter(p => !used.has(p.name));
-
-      // 이전 세트 중복 최소화 (완벽 강제 X, 자연스럽게)
-      pool.sort((a, b) => {
-        const aPrev = prevSetPlayers.includes(a.name);
-        const bPrev = prevSetPlayers.includes(b.name);
-
-        if (aPrev && !bPrev) return 1;
-        if (!aPrev && bPrev) return -1;
-        return 0;
-      });
-
-      if (pool.length < 4) break;
-
-      const game = pool.slice(0, 4);
-
-      game.forEach(p => {
+    while (team.length < 4 && pool.length > 0) {
+      const p = pool.shift();
+      if (!used.has(p.name)) {
         used.add(p.name);
-        p.games++;
-        currentSetPlayers.push(p.name);
-      });
-
-      matches.push(`${court}코트: ${game.map(p => p.name).join(" / ")}`);
+        team.push(p);
+      }
     }
 
-    prevSetPlayers = currentSetPlayers;
-
-    const box = document.createElement("div");
-    box.className = "result-set";
-
-    if (matches.length === 0) {
-      box.innerHTML = `<strong>${set.label}</strong><br>⚠️ 인원 부족`;
-    } else {
-      box.innerHTML =
-        `<strong>${set.label} (${set.start}~${set.end})</strong><br>` +
-        matches.join("<br>");
+    if (team.length === 4) {
+      result.push(team);
     }
+  }
 
-    resultEl.appendChild(box);
+  // 출력
+  result.forEach((r, i) => {
+    const div = document.createElement("div");
+    div.className = "result-set";
+
+    div.innerHTML =
+      `<strong>${COURTS[i]}코트</strong><br>` +
+      r.map(p => p.name).join(" / ");
+
+    resultEl.appendChild(div);
   });
 };
+
+/* =========================
+   랜덤
+========================= */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
