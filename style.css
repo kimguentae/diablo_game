@@ -1,24 +1,41 @@
 body {
-  background: #000;
-  color: #fff;
   font-family: sans-serif;
+  background: #000;
+  color: #f2f2f2;
   padding: 20px;
 }
 
+/* 🔥 제목 가운데 */
+h1 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 25px;
+}
+
+h2 {
+  font-size: 16px;
+  color: #bbb;
+  margin-top: 20px;
+}
+
+/* 참석자 */
 #playerList {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #222;
+  min-height: 120px;
 }
 
 .player {
+  background: #1c1c1c;
   padding: 10px;
-  border: 1px solid #333;
-  border-radius: 8px;
-  cursor: pointer;
-  min-width: 100px;
+  border-radius: 10px;
+  min-width: 110px;
   text-align: center;
+  cursor: pointer;
+  border: 1px solid #222;
 }
 
 .player.active {
@@ -26,18 +43,21 @@ body {
   color: #000;
 }
 
-button {
+/* 버튼 */
+.genBtn {
   width: 100%;
-  margin: 5px 0;
-  padding: 12px;
-  background: #2979ff;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 10px;
   border: none;
+  background: #2979ff;
   color: white;
-  border-radius: 8px;
 }
 
+/* 결과 */
 .result-set {
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid #333;
+  border: 1px solid #222;
+  background: #111;
 }
