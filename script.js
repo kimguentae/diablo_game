@@ -8,7 +8,10 @@ const names = [
   "이명진","전유준","성제현","장이현"
 ];
 
-const players = names.map(n => ({ name: n, active: false }));
+const players = names.map(n => ({
+  name: n,
+  active: false
+}));
 
 const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
@@ -68,7 +71,7 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   GAME
+   GAME 생성
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
@@ -110,7 +113,7 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
    결과 (대기 없음)
 ========================= */
 function render(){
-  resultEl.innerHTML="";
+  resultEl.innerHTML = "";
 
   for(let s=1;s<=5;s++){
     const data = setStore[s];
