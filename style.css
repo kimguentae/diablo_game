@@ -1,7 +1,7 @@
 body {
   font-family: sans-serif;
-  background: #121212;
-  color: #eee;
+  background: #000;
+  color: #f1f1f1;
   padding: 20px;
 }
 
@@ -13,41 +13,45 @@ h1, h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  min-height: 120px;
+  border: 1px dashed #333;
+  padding: 10px;
 }
 
 .player {
-  background: #333;
+  background: #1e1e1e;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-  min-width: 120px;
+  min-width: 110px;
+  text-align: center;
 }
 
 .player.active {
-  background: #2ecc71;
+  background: #00c853;
   color: #000;
 }
 
 .player-options {
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 6px;
+  color: #000;
 }
 
 button {
-  margin-top: 20px;
-  padding: 15px;
-  font-size: 16px;
+  margin: 20px 0;
+  padding: 16px;
+  font-size: 17px;
   width: 100%;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
-  background: #3498db;
+  background: #2962ff;
   color: white;
-  cursor: pointer;
 }
 
 .result-set {
   margin-top: 20px;
-  padding: 10px;
-  background: #1e1e1e;
-  border-radius: 8px;
+  padding: 12px;
+  background: #111;
+  border-radius: 10px;
 }
