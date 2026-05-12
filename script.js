@@ -8,10 +8,7 @@ const names = [
   "이명진","전유준","성제현","장이현"
 ];
 
-const players = names.map(n => ({
-  name: n,
-  active: false
-}));
+const players = names.map(n => ({ name: n, active: false }));
 
 const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
@@ -33,35 +30,7 @@ players.forEach(p => {
 });
 
 /* =========================
-   게스트
-========================= */
-const guest = document.createElement("div");
-guest.className = "player guest-box";
-guest.innerText = "+ 게스트";
-
-guest.ondblclick = () => {
-  const name = prompt("게스트 이름");
-  if (!name) return;
-
-  const p = { name, active: true };
-  players.push(p);
-
-  const div = document.createElement("div");
-  div.className = "player active";
-  div.innerText = name;
-
-  div.onclick = () => {
-    p.active = !p.active;
-    div.classList.toggle("active");
-  };
-
-  listEl.insertBefore(div, guest);
-};
-
-listEl.appendChild(guest);
-
-/* =========================
-   🔥 핵심: 세트별 "덮어쓰기"
+   세트 버튼
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn => {
   btn.onclick = () => {
@@ -91,26 +60,24 @@ document.querySelectorAll(".genBtn").forEach(btn => {
         }
       }
 
-      if (team.length === 4) {
-        matches.push(team);
-      }
+      if (team.length === 4) matches.push(team);
     }
 
-    // 🔥 여기 핵심: 기존 세트 있으면 삭제 후 다시 생성
+    // 🔥 핵심: 덮어쓰기
     const old = document.getElementById(`set-${setNo}`);
     if (old) old.remove();
 
-    const wrap = document.createElement("div");
-    wrap.className = "result-set";
-    wrap.id = `set-${setNo}`;
+    const div = document.createElement("div");
+    div.className = "result-set";
+    div.id = `set-${setNo}`;
 
-    wrap.innerHTML =
-      `<strong>(${setNo}세트)</strong><br>` +
+    div.innerHTML =
+      `<b>(${setNo}세트)</b><br>` +
       matches.map((t, i) =>
         `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
       ).join("<br>");
 
-    resultEl.appendChild(wrap);
+    resultEl.appendChild(div);
   };
 });
 
