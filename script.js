@@ -21,6 +21,8 @@ const countEl = document.getElementById("count");
 
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
+let pressTimer = null;
+
 /* =========================
    COUNT
 ========================= */
@@ -29,7 +31,7 @@ function updateCount(){
 }
 
 /* =========================
-   MAP
+   DOM MAP
 ========================= */
 const domMap = new Map();
 
@@ -41,11 +43,9 @@ players.forEach(p=>{
   div.className = "player";
   div.innerText = p.name;
 
-  div.setAttribute("draggable", "false");
-
   domMap.set(p.name, div);
 
-  attachPointer(div, p);
+  attachTouch(div, p);
 
   listEl.appendChild(div);
 });
@@ -68,9 +68,9 @@ guest.onclick = ()=>{
   div.className = "player active";
   div.innerText = name;
 
-  attachPointer(div, p);
-
   domMap.set(name, div);
+
+  attachTouch(div, p);
 
   listEl.appendChild(div);
   updateCount();
@@ -80,56 +80,59 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   🔥 POINTER 핵심 로직
+   🔥 핵심: 클릭 + 롱프레스 분리
 ========================= */
-function attachPointer(div, player){
+function attachTouch(div, player){
 
-  let timer = null;
   let startX = 0;
   let startY = 0;
   let moved = false;
 
-  div.style.touchAction = "none";
+  const start = (e) => {
 
-  div.addEventListener("pointerdown", (e)=>{
+    const t = e.touches ? e.touches[0] : null;
 
-    startX = e.clientX;
-    startY = e.clientY;
+    startX = t ? t.clientX : 0;
+    startY = t ? t.clientY : 0;
+
     moved = false;
 
-    timer = setTimeout(()=>{
+    pressTimer = setTimeout(()=>{
       changeColor(div, player);
     }, 600);
-  });
+  };
 
-  div.addEventListener("pointermove", (e)=>{
+  const move = (e) => {
+    const t = e.touches ? e.touches[0] : null;
+    if(!t) return;
 
-    if(Math.abs(e.clientX - startX) > 10 ||
-       Math.abs(e.clientY - startY) > 10){
+    if(Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10){
       moved = true;
-      clearTimeout(timer);
+      clearTimeout(pressTimer);
     }
+  };
 
-  });
+  const end = () => {
+    clearTimeout(pressTimer);
 
-  div.addEventListener("pointerup", ()=>{
-
-    clearTimeout(timer);
-
+    // 🔥 짧게 누른 경우만 클릭 처리
     if(!moved){
       player.active = !player.active;
       div.classList.toggle("active");
       updateCount();
       reorder();
     }
+  };
 
-  });
+  div.addEventListener("touchstart", start, { passive: true });
+  div.addEventListener("touchmove", move, { passive: true });
+  div.addEventListener("touchend", end);
 
-  div.addEventListener("pointercancel", ()=>{
-    clearTimeout(timer);
-  });
+  div.addEventListener("mousedown", start);
+  div.addEventListener("mouseup", end);
 
   div.addEventListener("contextmenu", e => e.preventDefault());
+  div.setAttribute("draggable", "false");
 }
 
 /* =========================
@@ -170,7 +173,7 @@ function reorder(){
 }
 
 /* =========================
-   GAME
+   GAME (고정페어)
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
