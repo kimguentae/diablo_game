@@ -17,10 +17,11 @@ const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 const countEl = document.getElementById("count");
 
+// 🔥 세트 고정
 const setStore = { 1:null, 2:null, 3:null, 4:null, 5:null };
 
 /* =========================
-   UI 생성
+   참석자 UI
 ========================= */
 function updateCount() {
   countEl.innerText = players.filter(p => p.active).length;
@@ -41,7 +42,7 @@ players.forEach(p => {
 });
 
 /* =========================
-   게스트
+   🔥 게스트 칸 복구
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player";
@@ -72,7 +73,7 @@ guest.ondblclick = () => {
 listEl.appendChild(guest);
 
 /* =========================
-   GAME 생성
+   GAME 버튼
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn => {
   btn.onclick = () => {
@@ -111,7 +112,7 @@ document.querySelectorAll(".genBtn").forEach(btn => {
 });
 
 /* =========================
-   GAME 출력 (고정 순서)
+   🔥 결과 고정 출력 (1~5세트)
 ========================= */
 function renderGames() {
   resultEl.innerHTML = "";
