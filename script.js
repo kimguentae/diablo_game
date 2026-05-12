@@ -13,15 +13,13 @@ const players = names.map(n => ({
   active: false
 }));
 
-let fixedPairs = [];
-
 const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 
 /* =========================
-   카드 렌더
+   UI
 ========================= */
-function renderPlayer(p) {
+players.forEach(p => {
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
@@ -32,63 +30,43 @@ function renderPlayer(p) {
   };
 
   listEl.appendChild(div);
-}
-
-players.forEach(renderPlayer);
+});
 
 /* =========================
-   🔥 게스트 박스 추가
+   게스트
 ========================= */
-function createGuestBox() {
-  const box = document.createElement("div");
-  box.className = "player guest-box";
-  box.innerText = "+ 게스트";
+const guest = document.createElement("div");
+guest.className = "player guest-box";
+guest.innerText = "+ 게스트";
 
-  box.ondblclick = () => {
-    const name = prompt("게스트 이름 입력");
-    if (!name) return;
+guest.ondblclick = () => {
+  const name = prompt("게스트 이름");
+  if (!name) return;
 
-    const p = { name, active: true };
-    players.push(p);
+  const p = { name, active: true };
+  players.push(p);
 
-    const div = document.createElement("div");
-    div.className = "player active";
-    div.innerText = name;
+  const div = document.createElement("div");
+  div.className = "player active";
+  div.innerText = name;
 
-    div.onclick = () => {
-      p.active = !p.active;
-      div.classList.toggle("active");
-    };
-
-    listEl.insertBefore(div, box);
+  div.onclick = () => {
+    p.active = !p.active;
+    div.classList.toggle("active");
   };
 
-  listEl.appendChild(box);
-}
-
-createGuestBox();
-
-/* =========================
-   고정페어 (더블클릭)
-========================= */
-listEl.ondblclick = (e) => {
-  if (e.target.classList.contains("player")) return;
-
-  const a = prompt("첫 번째 이름");
-  const b = prompt("두 번째 이름");
-  if (!a || !b) return;
-
-  fixedPairs.push([a, b]);
-  alert(`고정페어: ${a} - ${b}`);
+  listEl.insertBefore(div, guest);
 };
 
-/* =========================
-   5세트 자동 생성
-========================= */
-document.getElementById("generateBtn").onclick = () => {
-  resultEl.innerHTML = "";
+listEl.appendChild(guest);
 
-  for (let s = 1; s <= 5; s++) {
+/* =========================
+   세트별 버튼 처리
+========================= */
+document.querySelectorAll(".genBtn").forEach(btn => {
+  btn.onclick = () => {
+    const setNo = btn.dataset.set;
+
     const available = players.filter(p => p.active);
 
     if (available.length < 4) {
@@ -96,12 +74,11 @@ document.getElementById("generateBtn").onclick = () => {
       return;
     }
 
+    let pool = [...available];
+    shuffle(pool);
+
     let used = new Set();
     let result = [];
-
-    let pool = [...available];
-
-    shuffle(pool);
 
     for (let i = 0; i < COURTS.length; i++) {
       const team = [];
@@ -123,17 +100,17 @@ document.getElementById("generateBtn").onclick = () => {
     div.className = "result-set";
 
     div.innerHTML =
-      `<strong>(${s}세트)</strong><br>` +
+      `<strong>(${setNo}세트)</strong><br>` +
       result.map((r, i) =>
         `${COURTS[i]}코트: ${r.map(p => p.name).join(" / ")}`
       ).join("<br>");
 
     resultEl.appendChild(div);
-  }
-};
+  };
+});
 
 /* =========================
-   랜덤
+   shuffle
 ========================= */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
