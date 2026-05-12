@@ -1,37 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DIABLO TENNIS CLUB GAME TABLE</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIABLO TENNIS CLUB</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <h1>DIABLO TENNIS CLUB GAME TABLE</h1>
+<h1>DIABLO TENNIS CLUB</h1>
 
-  <!-- PLAYER -->
-  <section class="section">
-    <div class="section-title">
-      <span>PLAYER (<span id="playerCount">0</span>)</span>
-      <button class="btn plus" id="addGuestBtn">+</button>
-    </div>
+<h2>PLAYER (<span id="count">0</span>)</h2>
+<div id="playerList"></div>
 
-    <div id="playerGrid" class="grid-5"></div>
-  </section>
+<h2>GAME</h2>
 
-  <!-- GAME -->
-  <section class="section">
-    <div class="section-title">GAME</div>
-    <div class="grid-5">
-      <button class="btn game">GAME (1SET)</button>
-      <button class="btn game">GAME (2SET)</button>
-      <button class="btn game">GAME (3SET)</button>
-      <button class="btn game">GAME (4SET)</button>
-      <button class="btn game">GAME (5SET)</button>
-    </div>
-  </section>
+<div class="btnRow">
+  <button class="genBtn" data-set="1">1</button>
+  <button class="genBtn" data-set="2">2</button>
+  <button class="genBtn" data-set="3">3</button>
+  <button class="genBtn" data-set="4">4</button>
+  <button class="genBtn" data-set="5">5</button>
+</div>
 
-  <script src="script.js"></script>
+<h2>RESULT</h2>
+<div id="result"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
