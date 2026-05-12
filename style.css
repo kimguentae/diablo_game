@@ -1,0 +1,53 @@
+body {
+  font-family: sans-serif;
+  background: #121212;
+  color: #eee;
+  padding: 20px;
+}
+
+h1, h2 {
+  margin-bottom: 10px;
+}
+
+#playerList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.player {
+  background: #333;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.player.active {
+  background: #2ecc71;
+  color: #000;
+}
+
+.player-options {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+}
+
+.result-set {
+  margin-top: 20px;
+  padding: 10px;
+  background: #1e1e1e;
+  border-radius: 8px;
+}
