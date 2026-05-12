@@ -1,88 +1,144 @@
-body {
-  font-family: sans-serif;
-  background: #000;
-  color: #f2f2f2;
-  padding: 20px;
+const COURTS = ["A", "B", "C"];
+
+const names = [
+  "김재용","염성민","김근태","장준원","손가람","이정현",
+  "박종성","김준현","송지훈","박정규","김동현","유세호",
+  "하지훈","김남진","이우진","이해동","박종혁","최준희",
+  "최성욱","이진우","이현철","정상돈","최부승","최선우",
+  "이명진","전유준","성제현","장이현"
+];
+
+const players = names.map(n => ({
+  name: n,
+  active: false
+}));
+
+const listEl = document.getElementById("playerList");
+const resultEl = document.getElementById("result");
+const countEl = document.getElementById("count");
+
+const setStore = { 1:null, 2:null, 3:null, 4:null, 5:null };
+
+/* =========================
+   참석자 UI
+========================= */
+function updateCount() {
+  countEl.innerText = players.filter(p => p.active).length;
 }
 
-h1 {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 20px;
-}
+players.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "player";
+  div.innerText = p.name;
 
-h2 {
-  font-size: 16px;
-  color: #bbb;
+  div.onclick = () => {
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
+  };
+
+  listEl.appendChild(div);
+});
+
+/* =========================
+   🔥 게스트 (클릭)
+========================= */
+const guest = document.createElement("div");
+guest.className = "player guest";
+guest.innerText = "+ GUEST";
+
+guest.onclick = () => {
+  const name = prompt("게스트 이름");
+  if (!name) return;
+
+  const p = { name, active: true };
+  players.push(p);
+
+  const div = document.createElement("div");
+  div.className = "player active";
+  div.innerText = name;
+
+  div.onclick = () => {
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
+  };
+
+  listEl.insertBefore(div, guest);
+  updateCount();
+};
+
+listEl.appendChild(guest);
+
+/* =========================
+   GAME 생성
+========================= */
+document.querySelectorAll(".genBtn").forEach(btn => {
+  btn.onclick = () => {
+    const setNo = Number(btn.dataset.set);
+
+    const available = players.filter(p => p.active);
+
+    if (available.length < 4) {
+      alert("인원 부족");
+      return;
+    }
+
+    let pool = [...available];
+    shuffle(pool);
+
+    let used = new Set();
+    let matches = [];
+
+    for (let i = 0; i < COURTS.length; i++) {
+      const team = [];
+
+      while (team.length < 4 && pool.length > 0) {
+        const p = pool.shift();
+        if (!used.has(p.name)) {
+          used.add(p.name);
+          team.push(p);
+        }
+      }
+
+      if (team.length === 4) matches.push(team);
+    }
+
+    setStore[setNo] = matches;
+    renderGames();
+  };
+});
+
+/* =========================
+   결과 (대기 없음)
+========================= */
+function renderGames() {
+  resultEl.innerHTML = "";
+
+  for (let s = 1; s <= 5; s++) {
+    const data = setStore[s];
+
+    if (!data) continue; // 🔥 "대기" 완전 제거
+
+    const div = document.createElement("div");
+    div.className = "result-set";
+
+    div.innerHTML =
+      `<b>(${s}세트)</b><br>` +
+      data.map((t, i) =>
+        `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
+      ).join("<br>");
+
+    resultEl.appendChild(div);
+  }
 }
 
 /* =========================
-   🔥 5열 그리드
+   shuffle
 ========================= */
-#playerList {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-/* =========================
-   🔥 핵심: 카드 & 버튼 완전 통일
-========================= */
-.player,
-.genBtn {
-  height: 48px;
-  font-size: 12px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-}
-
-/* 선수 카드 */
-.player {
-  background: #1c1c1c;
-  border: 1px solid #222;
-  cursor: pointer;
-  text-align: center;
-}
-
-.player.active {
-  background: #00c853;
-  color: #000;
-}
-
-/* 게스트 */
-.player.guest {
-  border: 2px dashed #555;
-  color: #888;
-}
-
-/* =========================
-   🔥 GAME 버튼도 동일 사이즈
-========================= */
-.btnRow {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.genBtn {
-  background: #2979ff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* =========================
-   결과
-========================= */
-.result-set {
-  margin-top: 10px;
-  padding: 10px;
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 8px;
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
 }
