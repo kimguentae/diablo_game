@@ -41,11 +41,11 @@ players.forEach(p=>{
 });
 
 /* =========================
-   GUEST (placeholder 변경)
+   🔥 GUEST (+ 버튼)
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
-guest.innerText = "GUEST NAME";
+guest.innerText = "+";
 
 guest.onclick = ()=>{
   const name = prompt("GUEST NAME");
@@ -110,7 +110,7 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
 });
 
 /* =========================
-   RESULT (A B C 코트)
+   RESULT
 ========================= */
 function render(){
   resultEl.innerHTML = "";
