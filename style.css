@@ -20,7 +20,7 @@ h2 {
 }
 
 /* =========================
-   🔥 5열 고정 (모바일 핵심)
+   🔥 5열 고정 (핵심)
 ========================= */
 #playerList {
   display: grid;
@@ -57,7 +57,6 @@ h2 {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
-  margin-top: 5px;
 }
 
 .genBtn {
