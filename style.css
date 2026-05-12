@@ -6,9 +6,17 @@ body {
   font-family:sans-serif;
 }
 
-h1 { text-align:center; font-size:18px; }
-h2 { font-size:12px; color:#aaa; }
+h1 {
+  text-align:center;
+  font-size:18px;
+}
 
+h2 {
+  font-size:12px;
+  color:#aaa;
+}
+
+/* ================= PLAYER ================= */
 #playerList {
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -34,6 +42,7 @@ h2 { font-size:12px; color:#aaa; }
   color:#aaa;
 }
 
+/* ================= FIXED PAIR ================= */
 .pairBox {
   display:grid;
   grid-template-columns:1fr 1fr 0.4fr;
@@ -57,6 +66,7 @@ h2 { font-size:12px; color:#aaa; }
   border:1px dashed #555;
 }
 
+/* ================= PAIR ================= */
 .pairItem {
   background:#ffb300;
   color:#000;
@@ -66,6 +76,7 @@ h2 { font-size:12px; color:#aaa; }
   margin-top:5px;
 }
 
+/* ================= SET BUTTON ================= */
 .btnRow {
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -81,6 +92,7 @@ h2 { font-size:12px; color:#aaa; }
   color:#fff;
 }
 
+/* ================= RESULT ================= */
 .result-set {
   margin-top:10px;
   padding:8px;
@@ -90,49 +102,36 @@ h2 { font-size:12px; color:#aaa; }
   line-height:1.6;
 }
 
+/* ================= HEADER (SET + LOCK 오른쪽 끝) ================= */
 .result-set > div:first-child {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  width:100%;
 }
 
+/* ================= LOCK BUTTON ================= */
 .lockBtn {
   font-size:14px;
   background:transparent;
   border:none;
   color:#fff;
   cursor:pointer;
-  margin-left:auto;
+  padding:0;
+  margin-left:auto; /* 🔥 핵심: 오른쪽 끝 밀기 */
 }
 
+/* ================= SCORE ================= */
 .scoreWrap {
   margin-left:40px;
 }
 
+/* 🔥 요청: select 글씨 14px */
 .result-set select {
   background:#1c1c1c;
   color:#fff;
   border:1px solid #222;
   border-radius:6px;
-  font-size:14px;
+  font-size:14px; /* 여기 중요 */
   text-align:center;
-}
-
-#analysisBox {
-  margin-top:10px;
-  background:#111;
-  padding:10px;
-  border-radius:6px;
-  font-size:14px;
-  line-height:1.6;
-}
-
-#analysisBtn {
-  margin-top:10px;
-  width:100%;
-  padding:10px;
-  background:#ffb300;
-  border:none;
-  border-radius:6px;
-  font-weight:bold;
 }
