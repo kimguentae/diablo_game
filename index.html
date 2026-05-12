@@ -1,35 +1,167 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DIABLO TENNIS CLUB</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DIABLO TENNIS CLUB GAME TABLE</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f172a;
+  color: #fff;
+}
+
+h1 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: 14px;
+  margin: 12px 0 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.player-btn, .add-btn {
+  background: #1e293b;
+  border-radius: 6px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+  user-select: none;
+  transition: transform 0.08s, background 0.08s;
+}
+
+.player-btn:active {
+  transform: scale(0.95);
+  background: #334155;
+}
+
+.selected {
+  background: #2563eb;
+}
+
+.add-btn {
+  background: #334155;
+  font-weight: bold;
+}
+
+.fixed-pair-box {
+  background: #020617;
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 6px;
+}
+
+.pair {
+  font-size: 13px;
+  margin: 4px 0;
+}
+</style>
 </head>
 
 <body>
 
-<h1>DIABLO TENNIS CLUB</h1>
+<h1>DIABLO TENNIS CLUB GAME TABLE</h1>
 
-<h2>PLAYER (<span id="count">0</span>)</h2>
-<div id="playerList"></div>
+<div class="section-title">PLAYER</div>
+<div id="playerGrid" class="grid"></div>
 
-<h2>FIXED PAIR</h2>
-<div id="pairList"></div>
-<div class="pairAdd" id="addPair">+</div>
-
-<h2>GAME</h2>
-<div class="btnRow">
-  <button class="genBtn" data-set="1">1</button>
-  <button class="genBtn" data-set="2">2</button>
-  <button class="genBtn" data-set="3">3</button>
-  <button class="genBtn" data-set="4">4</button>
-  <button class="genBtn" data-set="5">5</button>
+<div class="section-title">FIXED PAIR</div>
+<div class="fixed-pair-box">
+  <div id="pairList"></div>
+  <div class="add-btn" onclick="openPairSelect()">+</div>
 </div>
 
-<h2>GAME RESULT</h2>
-<div id="result"></div>
+<script>
+let players = [];
+let fixedPairs = [];
+let pairCount = 1;
 
-<script src="script.js"></script>
+const playerGrid = document.getElementById('playerGrid');
+const pairList = document.getElementById('pairList');
+
+function renderPlayers() {
+  playerGrid.innerHTML = '';
+
+  players.forEach((name, idx) => {
+    const btn = document.createElement('div');
+    btn.className = 'player-btn';
+    btn.textContent = name;
+
+    btn.onclick = () => {
+      players.splice(idx,1);
+      players.unshift(name);
+      renderPlayers();
+    };
+
+    btn.ondblclick = () => {
+      players.splice(idx,1);
+      renderPlayers();
+    };
+
+    playerGrid.appendChild(btn);
+  });
+
+  const add = document.createElement('div');
+  add.className = 'add-btn';
+  add.textContent = '+';
+  add.onclick = addGuest;
+  playerGrid.appendChild(add);
+}
+
+function addGuest() {
+  const name = prompt('GUEST NAME');
+  if (name) {
+    players.push(name);
+    renderPlayers();
+  }
+}
+
+function openPairSelect() {
+  if (players.length < 2) {
+    alert('참석자가 2명 이상 필요합니다');
+    return;
+  }
+
+  const p1 = prompt(
+    '첫 번째 이름 선택:\n' + players.join(', ')
+  );
+  const p2 = prompt(
+    '두 번째 이름 선택:\n' + players.join(', ')
+  );
+
+  if (!p1 || !p2 || p1 === p2) return;
+
+  fixedPairs.push({
+    name: `PAIR ${pairCount++}`,
+    players: [p1, p2]
+  });
+
+  renderPairs();
+}
+
+function renderPairs() {
+  pairList.innerHTML = '';
+  fixedPairs.forEach(pair => {
+    const div = document.createElement('div');
+    div.className = 'pair';
+    div.textContent = `${pair.name} : ${pair.players[0]} / ${pair.players[1]}`;
+    pairList.appendChild(div);
+  });
+}
+
+renderPlayers();
+</script>
+
 </body>
 </html>
