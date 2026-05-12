@@ -1,8 +1,6 @@
 const COURTS = ["A", "B", "C"];
 const COLORS = ["red","blue","green","yellow","purple"];
 
-let pressTimer = null;
-
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
   "박종성","김준현","송지훈","박정규","김동현","유세호",
@@ -22,6 +20,8 @@ const resultEl = document.getElementById("result");
 const countEl = document.getElementById("count");
 
 const setStore = {1:null,2:null,3:null,4:null,5:null};
+
+let pressTimer = null;
 
 /* =========================
    COUNT
@@ -43,18 +43,9 @@ players.forEach(p=>{
   div.className = "player";
   div.innerText = p.name;
 
-  div.setAttribute("draggable", "false"); // 🔥 핵심
-
   domMap.set(p.name, div);
 
-  div.onclick = ()=>{
-    p.active = !p.active;
-    div.classList.toggle("active");
-    updateCount();
-    reorder();
-  };
-
-  attachPress(div, p);
+  attachTouch(div, p);
 
   listEl.appendChild(div);
 });
@@ -65,8 +56,6 @@ players.forEach(p=>{
 const guest = document.createElement("div");
 guest.className = "player guest";
 guest.innerText = "+";
-
-guest.setAttribute("draggable", "false");
 
 guest.onclick = ()=>{
   const name = prompt("GUEST NAME");
@@ -79,18 +68,9 @@ guest.onclick = ()=>{
   div.className = "player active";
   div.innerText = name;
 
-  div.setAttribute("draggable", "false");
-
   domMap.set(name, div);
 
-  div.onclick = ()=>{
-    p.active = !p.active;
-    div.classList.toggle("active");
-    updateCount();
-    reorder();
-  };
-
-  attachPress(div, p);
+  attachTouch(div, p);
 
   listEl.appendChild(div);
   updateCount();
@@ -100,33 +80,59 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   🔥 롱프레스 (모바일 안정)
+   🔥 핵심: 클릭 + 롱프레스 분리
 ========================= */
-function attachPress(div, player){
+function attachTouch(div, player){
+
+  let startX = 0;
+  let startY = 0;
+  let moved = false;
 
   const start = (e) => {
-    e.preventDefault();
-    e.stopPropagation(); // 🔥 중요
+
+    const t = e.touches ? e.touches[0] : null;
+
+    startX = t ? t.clientX : 0;
+    startY = t ? t.clientY : 0;
+
+    moved = false;
 
     pressTimer = setTimeout(()=>{
       changeColor(div, player);
     }, 600);
   };
 
-  const end = () => {
-    clearTimeout(pressTimer);
+  const move = (e) => {
+    const t = e.touches ? e.touches[0] : null;
+    if(!t) return;
+
+    if(Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10){
+      moved = true;
+      clearTimeout(pressTimer);
+    }
   };
 
-  div.addEventListener("touchstart", start, { passive: false });
+  const end = () => {
+    clearTimeout(pressTimer);
+
+    // 🔥 짧게 누른 경우만 클릭 처리
+    if(!moved){
+      player.active = !player.active;
+      div.classList.toggle("active");
+      updateCount();
+      reorder();
+    }
+  };
+
+  div.addEventListener("touchstart", start, { passive: true });
+  div.addEventListener("touchmove", move, { passive: true });
   div.addEventListener("touchend", end);
 
   div.addEventListener("mousedown", start);
   div.addEventListener("mouseup", end);
-  div.addEventListener("mouseleave", end);
 
   div.addEventListener("contextmenu", e => e.preventDefault());
-
-  div.addEventListener("dragstart", e => e.preventDefault()); // 🔥 핵심
+  div.setAttribute("draggable", "false");
 }
 
 /* =========================
@@ -144,7 +150,7 @@ function changeColor(div, player){
 }
 
 /* =========================
-   정렬 (선택자 상단)
+   정렬
 ========================= */
 function reorder(){
 
@@ -167,7 +173,7 @@ function reorder(){
 }
 
 /* =========================
-   GAME
+   GAME (고정페어)
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
