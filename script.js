@@ -1,4 +1,4 @@
-const COURTS = ["A","B","C"];
+const COURTS = ["A", "B", "C"];
 
 const names = [
   "김재용","염성민","김근태","장준원","손가람","이정현",
@@ -9,8 +9,8 @@ const names = [
 ];
 
 const players = names.map(n => ({
-  name:n,
-  active:false
+  name: n,
+  active: false
 }));
 
 let pairs = [];
@@ -29,7 +29,7 @@ const addPair = document.getElementById("addPair");
 const pairList = document.getElementById("pairList");
 
 /* =========================
-   PLAYER + GUEST (유지)
+   PLAYER + GUEST 유지
 ========================= */
 function renderPlayers(){
   listEl.innerHTML = "";
@@ -52,7 +52,7 @@ function renderPlayers(){
     listEl.appendChild(div);
   });
 
-  // GUEST 버튼 유지 (삭제 금지 원칙 반영)
+  // GUEST +
   const guest = document.createElement("div");
   guest.className = "player guest";
   guest.textContent = "+";
@@ -61,11 +61,7 @@ function renderPlayers(){
     const name = prompt("GUEST NAME");
     if(!name) return;
 
-    players.push({
-      name,
-      active:true
-    });
-
+    players.push({name, active:true});
     renderAll();
   };
 
