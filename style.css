@@ -16,13 +16,16 @@ h2 {
   color: #aaa;
 }
 
-/* 5열 */
+/* =========================
+   5열 고정
+========================= */
 #playerList {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
 }
 
+/* 카드 */
 .player {
   background: #1c1c1c;
   border-radius: 6px;
@@ -30,6 +33,7 @@ h2 {
   text-align: center;
   padding: 8px 2px;
   border: 1px solid #222;
+  user-select: none;
 }
 
 .player.active {
@@ -37,7 +41,7 @@ h2 {
   color: #000;
 }
 
-/* 게스트 + 버튼 */
+/* 게스트 */
 .player.guest {
   border: 1px dashed #555;
   color: #888;
