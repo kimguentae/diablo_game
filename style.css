@@ -10,29 +10,29 @@ h1 {
   font-size: 22px;
 }
 
-h2 {
-  font-size: 16px;
-  color: #bbb;
+/* 🔥 5열 정렬 */
+#playerList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 10px;
 }
 
-/* 참석자 */
-#playerList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  border: 1px solid #222;
-  min-height: 120px;
+/* 카드 + 버튼 동일 사이즈 */
+.player, .genBtn {
+  height: 45px;
+  font-size: 12px;
+  border-radius: 8px;
 }
 
 /* 카드 */
 .player {
   background: #1c1c1c;
-  padding: 10px;
-  border-radius: 10px;
-  min-width: 110px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  border: 1px solid #222;
 }
 
 .player.active {
@@ -40,21 +40,23 @@ h2 {
   color: #000;
 }
 
-/* 🔥 GAME 버튼 가로 */
+/* 게스트 */
+.player.guest {
+  border: 2px dashed #555;
+  color: #888;
+}
+
+/* GAME 버튼 */
 .btnRow {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
 
 .genBtn {
-  flex: 1;
-  padding: 10px;
-  font-size: 12px;
-  border-radius: 6px;
-  border: none;
   background: #2979ff;
   color: white;
+  border: none;
 }
 
 /* 결과 */
