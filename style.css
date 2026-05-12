@@ -8,31 +8,44 @@ body {
 h1 {
   text-align: center;
   font-size: 22px;
+  margin-bottom: 20px;
 }
 
-/* 🔥 5열 정렬 */
+h2 {
+  font-size: 16px;
+  color: #bbb;
+}
+
+/* =========================
+   🔥 5열 그리드
+========================= */
 #playerList {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
-  padding: 10px;
+  margin-bottom: 15px;
 }
 
-/* 카드 + 버튼 동일 사이즈 */
-.player, .genBtn {
-  height: 45px;
+/* =========================
+   🔥 핵심: 카드 & 버튼 완전 통일
+========================= */
+.player,
+.genBtn {
+  height: 48px;
   font-size: 12px;
   border-radius: 8px;
-}
-
-/* 카드 */
-.player {
-  background: #1c1c1c;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  user-select: none;
+}
+
+/* 선수 카드 */
+.player {
+  background: #1c1c1c;
   border: 1px solid #222;
+  cursor: pointer;
+  text-align: center;
 }
 
 .player.active {
@@ -46,23 +59,30 @@ h1 {
   color: #888;
 }
 
-/* GAME 버튼 */
+/* =========================
+   🔥 GAME 버튼도 동일 사이즈
+========================= */
 .btnRow {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
+  margin-bottom: 10px;
 }
 
 .genBtn {
   background: #2979ff;
   color: white;
   border: none;
+  cursor: pointer;
 }
 
-/* 결과 */
+/* =========================
+   결과
+========================= */
 .result-set {
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid #222;
   background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
 }
