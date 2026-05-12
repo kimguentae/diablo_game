@@ -1,111 +1,137 @@
 body {
-  margin: 0;
-  padding: 10px;
-  background: #000;
-  color: #fff;
-  font-family: sans-serif;
+  margin:0;
+  padding:10px;
+  background:#000;
+  color:#fff;
+  font-family:sans-serif;
 }
 
 h1 {
-  text-align: center;
-  font-size: 18px;
+  text-align:center;
+  font-size:18px;
 }
 
 h2 {
-  font-size: 12px;
-  color: #aaa;
+  font-size:12px;
+  color:#aaa;
 }
 
-/* PLAYER */
+/* ================= PLAYER ================= */
 #playerList {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
 }
 
 .player {
-  background: #1c1c1c;
-  border-radius: 6px;
-  font-size: 10px;
-  text-align: center;
-  padding: 8px 2px;
-  border: 1px solid #222;
-  user-select: none;
+  background:#1c1c1c;
+  border-radius:6px;
+  font-size:10px;
+  text-align:center;
+  padding:8px 2px;
+  border:1px solid #222;
 }
 
 .player.active {
-  background: #00c853;
-  color: #000;
+  background:#00c853;
+  color:#000;
 }
 
 .player.guest {
-  border: 1px dashed #555;
-  color: #aaa;
+  border:1px dashed #555;
+  color:#aaa;
 }
 
-/* FIXED PAIR */
+/* ================= FIXED PAIR ================= */
 .pairBox {
-  display: grid;
-  grid-template-columns: 1fr 1fr 0.4fr;
-  gap: 4px;
-  margin-bottom: 10px;
+  display:grid;
+  grid-template-columns:1fr 1fr 0.4fr;
+  gap:4px;
 }
 
 .pairBox select {
-  background: #1c1c1c;
-  color: #fff;
-  border: 1px solid #222;
-  border-radius: 6px;
-  font-size: 9px;
-  height: 34px;
-  text-align: center;
-  box-sizing: border-box;
+  background:#1c1c1c;
+  color:#fff;
+  border:1px solid #222;
+  border-radius:6px;
+  font-size:9px;
+  height:34px;
+  text-align:center;
 }
 
-/* 🔥 + 버튼 높이 통일 */
 #addPair {
-  height: 34px;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed #555;
-  border-radius: 6px;
-  background: #1c1c1c;
-  box-sizing: border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px dashed #555;
 }
 
-/* PAIR */
+/* ================= PAIR ================= */
 .pairItem {
-  background: #ffb300;
-  color: #000;
-  font-size: 10px;
-  padding: 6px;
-  border-radius: 6px;
-  margin-top: 5px;
+  background:#ffb300;
+  color:#000;
+  font-size:10px;
+  padding:6px;
+  border-radius:6px;
+  margin-top:5px;
 }
 
-/* SET BUTTON */
+/* ================= SET BUTTON ================= */
 .btnRow {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
 }
 
 .genBtn {
-  font-size: 10px;
-  padding: 10px 0;
-  border: none;
-  border-radius: 6px;
-  background: #2979ff;
-  color: white;
+  font-size:10px;
+  padding:10px 0;
+  border:none;
+  border-radius:6px;
+  background:#2979ff;
+  color:#fff;
 }
 
-/* GAME RESULT */
+/* ================= RESULT ================= */
 .result-set {
-  margin-top: 8px;
-  padding: 8px;
-  background: #111;
-  border-radius: 6px;
-  font-size: 11px;
+  margin-top:10px;
+  padding:8px;
+  background:#111;
+  border-radius:6px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* ================= HEADER (SET + LOCK 오른쪽 끝) ================= */
+.result-set > div:first-child {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  width:100%;
+}
+
+/* ================= LOCK BUTTON ================= */
+.lockBtn {
+  font-size:14px;
+  background:transparent;
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  padding:0;
+  margin-left:auto; /* 🔥 핵심: 오른쪽 끝 밀기 */
+}
+
+/* ================= SCORE ================= */
+.scoreWrap {
+  margin-left:40px;
+}
+
+/* 🔥 요청: select 글씨 14px */
+.result-set select {
+  background:#1c1c1c;
+  color:#fff;
+  border:1px solid #222;
+  border-radius:6px;
+  font-size:14px; /* 여기 중요 */
+  text-align:center;
 }
