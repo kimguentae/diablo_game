@@ -20,7 +20,7 @@ const countEl = document.getElementById("count");
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
 /* =========================
-   참석자
+   PLAYER
 ========================= */
 function updateCount(){
   countEl.innerText = players.filter(p=>p.active).length;
@@ -41,14 +41,14 @@ players.forEach(p=>{
 });
 
 /* =========================
-   게스트 (클릭)
+   GUEST (placeholder 변경)
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
-guest.innerText = "+";
+guest.innerText = "GUEST NAME";
 
 guest.onclick = ()=>{
-  const name = prompt("게스트 이름");
+  const name = prompt("GUEST NAME");
   if(!name) return;
 
   const p = {name, active:true};
@@ -71,7 +71,7 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   GAME 생성
+   GAME
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick = ()=>{
@@ -110,7 +110,7 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
 });
 
 /* =========================
-   결과 (대기 없음)
+   RESULT (A B C 코트)
 ========================= */
 function render(){
   resultEl.innerHTML = "";
@@ -125,7 +125,7 @@ function render(){
     div.innerHTML =
       `(${s})<br>` +
       data.map((t,i)=>
-        `C${i+1}: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
+        `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
       ).join("<br>");
 
     resultEl.appendChild(div);
