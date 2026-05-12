@@ -20,39 +20,30 @@ const countEl = document.getElementById("count");
 const setStore = {1:null,2:null,3:null,4:null,5:null};
 
 /* =========================
-   PLAYER UI
+   PLAYER
 ========================= */
 function updateCount(){
   countEl.innerText = players.filter(p=>p.active).length;
 }
 
-/* DOM 저장용 */
-const domMap = new Map();
-
-/* =========================
-   선수 생성
-========================= */
 players.forEach(p=>{
   const div = document.createElement("div");
   div.className = "player";
   div.innerText = p.name;
 
-  domMap.set(p.name, div);
-
   div.onclick = ()=>{
-
     p.active = !p.active;
     div.classList.toggle("active");
     updateCount();
 
-    reorder(); // 🔥 핵심
+    reorder();
   };
 
   listEl.appendChild(div);
 });
 
 /* =========================
-   🔥 게스트 (+)
+   GUEST (+)
 ========================= */
 const guest = document.createElement("div");
 guest.className = "player guest";
@@ -69,8 +60,6 @@ guest.onclick = ()=>{
   div.className = "player active";
   div.innerText = name;
 
-  domMap.set(name, div);
-
   div.onclick = ()=>{
     p.active = !p.active;
     div.classList.toggle("active");
@@ -86,15 +75,16 @@ guest.onclick = ()=>{
 listEl.appendChild(guest);
 
 /* =========================
-   🔥 핵심: 선택자 상단 정렬
+   선택자 상단 정렬
 ========================= */
 function reorder(){
-
   const active = [];
   const inactive = [];
 
   players.forEach(p=>{
-    const el = domMap.get(p.name);
+    const el = Array.from(listEl.children)
+      .find(d => d.innerText === p.name);
+
     if(!el) return;
 
     if(p.active) active.push(el);
@@ -103,8 +93,8 @@ function reorder(){
 
   listEl.innerHTML = "";
 
-  active.forEach(el=> listEl.appendChild(el));
-  inactive.forEach(el=> listEl.appendChild(el));
+  active.forEach(el => listEl.appendChild(el));
+  inactive.forEach(el => listEl.appendChild(el));
   listEl.appendChild(guest);
 }
 
