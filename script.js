@@ -8,14 +8,24 @@ const names = [
   "이명진","전유준","성제현","장이현"
 ];
 
-const players = names.map(n => ({ name: n, active: false }));
+const players = names.map(n => ({
+  name: n,
+  active: false
+}));
 
 const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
+const countEl = document.getElementById("count");
+
+const setStore = { 1:null, 2:null, 3:null, 4:null, 5:null };
 
 /* =========================
-   UI
+   UI 생성
 ========================= */
+function updateCount() {
+  countEl.innerText = players.filter(p => p.active).length;
+}
+
 players.forEach(p => {
   const div = document.createElement("div");
   div.className = "player";
@@ -24,17 +34,49 @@ players.forEach(p => {
   div.onclick = () => {
     p.active = !p.active;
     div.classList.toggle("active");
+    updateCount();
   };
 
   listEl.appendChild(div);
 });
 
 /* =========================
-   세트 버튼
+   게스트
+========================= */
+const guest = document.createElement("div");
+guest.className = "player";
+guest.style.border = "2px dashed #555";
+guest.innerText = "+ GUEST";
+
+guest.ondblclick = () => {
+  const name = prompt("게스트 이름");
+  if (!name) return;
+
+  const p = { name, active: true };
+  players.push(p);
+
+  const div = document.createElement("div");
+  div.className = "player active";
+  div.innerText = name;
+
+  div.onclick = () => {
+    p.active = !p.active;
+    div.classList.toggle("active");
+    updateCount();
+  };
+
+  listEl.insertBefore(div, guest);
+  updateCount();
+};
+
+listEl.appendChild(guest);
+
+/* =========================
+   GAME 생성
 ========================= */
 document.querySelectorAll(".genBtn").forEach(btn => {
   btn.onclick = () => {
-    const setNo = btn.dataset.set;
+    const setNo = Number(btn.dataset.set);
 
     const available = players.filter(p => p.active);
 
@@ -63,23 +105,36 @@ document.querySelectorAll(".genBtn").forEach(btn => {
       if (team.length === 4) matches.push(team);
     }
 
-    // 🔥 핵심: 덮어쓰기
-    const old = document.getElementById(`set-${setNo}`);
-    if (old) old.remove();
+    setStore[setNo] = matches;
+    renderGames();
+  };
+});
+
+/* =========================
+   GAME 출력 (고정 순서)
+========================= */
+function renderGames() {
+  resultEl.innerHTML = "";
+
+  for (let s = 1; s <= 5; s++) {
+    const data = setStore[s];
 
     const div = document.createElement("div");
     div.className = "result-set";
-    div.id = `set-${setNo}`;
 
-    div.innerHTML =
-      `<b>(${setNo}세트)</b><br>` +
-      matches.map((t, i) =>
-        `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
-      ).join("<br>");
+    if (!data) {
+      div.innerHTML = `<b>(${s}세트)</b><br>대기`;
+    } else {
+      div.innerHTML =
+        `<b>(${s}세트)</b><br>` +
+        data.map((t, i) =>
+          `${COURTS[i]}코트: ${t[0].name} ${t[1].name} vs ${t[2].name} ${t[3].name}`
+        ).join("<br>");
+    }
 
     resultEl.appendChild(div);
-  };
-});
+  }
+}
 
 /* =========================
    shuffle
