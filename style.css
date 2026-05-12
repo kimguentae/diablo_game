@@ -1,36 +1,24 @@
 body {
-  font-family: sans-serif;
   background: #000;
-  color: #f2f2f2;
+  color: #fff;
+  font-family: sans-serif;
   padding: 20px;
-}
-
-h1 { font-size: 20px; }
-
-h2 {
-  margin-top: 20px;
-  font-size: 16px;
-  color: #bbb;
 }
 
 #playerList {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px;
-  border: 1px solid #222;
-  min-height: 120px;
+  margin-bottom: 20px;
 }
 
-/* 플레이어 카드 */
 .player {
-  background: #1c1c1c;
   padding: 10px;
-  border-radius: 10px;
-  min-width: 110px;
-  text-align: center;
+  border: 1px solid #333;
+  border-radius: 8px;
   cursor: pointer;
-  border: 1px solid #222;
+  min-width: 100px;
+  text-align: center;
 }
 
 .player.active {
@@ -38,33 +26,18 @@ h2 {
   color: #000;
 }
 
-/* 게스트 */
-.guest-box {
-  border: 2px dashed #444;
-  color: #777;
-}
-
-/* 버튼 */
-.genBtn {
+button {
   width: 100%;
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: #2979ff;
-  color: white;
-  cursor: pointer;
-}
-
-.genBtn:hover {
-  background: #1c5fd6;
-}
-
-/* 결과 */
-.result-set {
-  margin-top: 15px;
+  margin: 5px 0;
   padding: 12px;
-  background: #111;
-  border-radius: 10px;
-  border: 1px solid #222;
+  background: #2979ff;
+  border: none;
+  color: white;
+  border-radius: 8px;
+}
+
+.result-set {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #333;
 }
