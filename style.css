@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 12px;
@@ -8,88 +12,61 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 16px;
 }
 
-.section-title {
-  font-size: 14px;
-  margin: 14px 0 8px;
+/* 섹션 */
+.section {
+  margin-bottom: 20px;
 }
 
-.grid {
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* 버튼 공통 */
+.btn {
+  width: 100%;
+  padding: 10px 0;
+  background: #1e293b;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.95);
+  background: #334155;
+}
+
+.btn.selected {
+  background: #2563eb;
+}
+
+/* + 버튼 */
+.plus {
+  width: 40px;
+  background: #0ea5e9;
+  font-weight: bold;
+}
+
+/* 5열 그리드 */
+.grid-5 {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 6px;
 }
 
-.player-btn,
-.add-btn {
-  background: #1e293b;
-  border-radius: 6px;
-  padding: 14px 0;
-  font-size: 13px;
-  text-align: center;
-  user-select: none;
-  transition: transform 0.1s ease, background 0.1s ease;
-}
-
-.player-btn:active {
-  transform: scale(0.94);
-  background: #334155;
-}
-
-.add-btn {
-  background: #334155;
-  font-weight: bold;
-}
-
-.fixed-box {
+/* GAME 버튼 */
+.game {
   background: #020617;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.pair {
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  width: 90%;
-  background: #020617;
-  padding: 16px;
-  border-radius: 10px;
-}
-
-.modal-content h3 {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  border-radius: 6px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  background: #2563eb;
-  color: white;
-  border: none;
+  border: 1px solid #334155;
 }
