@@ -89,7 +89,6 @@ function renderPairs(){
 /* ================= SET GENERATE ================= */
 document.querySelectorAll(".genBtn").forEach(btn=>{
   btn.onclick=()=>{
-
     const setNo=btn.dataset.set;
 
     if(setStore[setNo]?.locked){
@@ -98,15 +97,15 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
     }
 
     const active=players.filter(p=>p.active);
-    if(active.length<4) return;
+    if(active.length < 4) return;
 
     let used=new Set();
     let teams=[];
 
+    // 고정 페어
     pairs.forEach(p=>{
       const a=active.find(x=>x.name===p[0]);
       const b=active.find(x=>x.name===p[1]);
-
       if(a&&b){
         teams.push([a,b]);
         used.add(a.name);
@@ -114,20 +113,27 @@ document.querySelectorAll(".genBtn").forEach(btn=>{
       }
     });
 
+    // 나머지
     let rest=active.filter(p=>!used.has(p.name));
     shuffle(rest);
 
-    for(let i=0;i<rest.length;i+=2){
-      if(rest[i+1]) teams.push([rest[i],rest[i+1]]);
+    for(let i=0;i+1<rest.length;i+=2){
+      teams.push([rest[i],rest[i+1]]);
     }
+
+    // 👉 여기서 핵심
+    const possibleMatches = Math.floor(teams.length / 2);
+    if(possibleMatches < 1) return;
 
     shuffle(teams);
 
+    const maxCourts = Math.min(3, possibleMatches);
     let matches=[];
-    for(let i=0;i<Math.min(COURTS.length,teams.length/2);i++){
+
+    for(let i=0;i<maxCourts;i++){
       matches.push({
-        team1:teams[i*2],
-        team2:teams[i*2+1],
+        team1: teams[i*2],
+        team2: teams[i*2+1],
         s1:0,
         s2:0
       });
@@ -155,10 +161,7 @@ function renderResult(){
     wrap.className="result-set";
 
     const header=document.createElement("div");
-
     const title=document.createElement("span");
-
-    // 🔥 괄호 제거
     title.textContent=`${i}SET `;
 
     const lock=document.createElement("button");
@@ -171,7 +174,6 @@ function renderResult(){
     wrap.appendChild(header);
 
     set.matches.forEach((m,idx)=>{
-
       const line=document.createElement("div");
 
       const text=document.createTextNode(
@@ -180,7 +182,6 @@ function renderResult(){
 
       const s1=document.createElement("select");
       const s2=document.createElement("select");
-
       for(let k=0;k<=6;k++){
         s1.appendChild(new Option(k,k));
         s2.appendChild(new Option(k,k));
@@ -188,20 +189,17 @@ function renderResult(){
 
       s1.value=m.s1;
       s2.value=m.s2;
-
       s1.onchange=()=>m.s1=+s1.value;
       s2.onchange=()=>m.s2=+s2.value;
 
       const scoreWrap=document.createElement("span");
       scoreWrap.className="scoreWrap";
-
       scoreWrap.appendChild(s1);
       scoreWrap.appendChild(document.createTextNode(" : "));
       scoreWrap.appendChild(s2);
 
       line.appendChild(text);
       line.appendChild(scoreWrap);
-
       wrap.appendChild(line);
     });
 
@@ -211,11 +209,10 @@ function renderResult(){
     });
 
     const wait=active.filter(p=>!played.has(p.name));
-
     const w=document.createElement("div");
     w.textContent="대기 : "+wait.map(p=>p.name).join(" ");
-
     wrap.appendChild(w);
+
     resultEl.appendChild(wrap);
   }
 }
