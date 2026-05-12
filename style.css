@@ -26,7 +26,7 @@ h2 {
 }
 
 /* =========================
-   PLAYER (🔥 모바일 완전 잠금)
+   PLAYER (완전 터치 안정)
 ========================= */
 .player {
   background: #1c1c1c;
@@ -36,14 +36,12 @@ h2 {
   padding: 8px 2px;
   border: 1px solid #222;
 
-  /* 🔥 핵심: 드래그/선택 완전 차단 */
+  /* 🔥 핵심: 모바일 드래그 완전 차단 */
   user-select: none !important;
   -webkit-user-select: none !important;
-  -ms-user-select: none !important;
   -webkit-touch-callout: none !important;
 
-  /* 🔥 터치 드래그 차단 */
-  touch-action: none !important;
+  touch-action: manipulation;
 
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
