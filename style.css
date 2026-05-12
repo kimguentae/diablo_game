@@ -1,64 +1,76 @@
 body {
-  font-family: sans-serif;
-  background: #000;
-  color: #f5f5f5;
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  background: #0b0b0b;
+  color: #f2f2f2;
   padding: 20px;
 }
 
 h1 {
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
 h2 {
-  margin-top: 20px;
+  margin: 20px 0 10px;
+  font-size: 16px;
+  color: #bbb;
 }
 
+/* 🔥 플레이어 카드 */
 #playerList {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
-  border: 1px solid #222;
-  min-height: 100px;
 }
 
 .player {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
   background: #1c1c1c;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  cursor: pointer;
+  font-size: 13px;
   transition: 0.2s;
+  border: 1px solid #222;
+}
+
+.player:hover {
+  transform: scale(1.05);
 }
 
 .player.active {
-  background: #00c853;
+  background: linear-gradient(145deg, #00c853, #00e676);
   color: #000;
   font-weight: bold;
 }
 
+/* 버튼 */
 button {
-  margin-top: 20px;
   width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  background: #2962ff;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
   border: none;
+  background: #2979ff;
   color: white;
-  border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #1e4fd6;
+  background: #1c5fd6;
 }
 
+/* 결과 */
 .result-set {
   margin-top: 15px;
-  padding: 10px;
-  background: #111;
-  border-radius: 10px;
+  padding: 12px;
+  background: #151515;
   border: 1px solid #222;
+  border-radius: 12px;
 }
