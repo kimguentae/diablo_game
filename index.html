@@ -8,31 +8,30 @@
 </head>
 <body>
 
-<h1>DIABLO TENNIS CLUB GAME TABLE</h1>
+  <h1>DIABLO TENNIS CLUB GAME TABLE</h1>
 
-<section>
-  <div class="section-title">PLAYER</div>
-  <div id="playerGrid" class="grid"></div>
-</section>
+  <!-- PLAYER -->
+  <section class="section">
+    <div class="section-title">
+      <span>PLAYER (<span id="playerCount">0</span>)</span>
+      <button class="btn plus" id="addGuestBtn">+</button>
+    </div>
 
-<section>
-  <div class="section-title">FIXED PAIR</div>
-  <div class="fixed-box">
-    <div id="pairList"></div>
-    <div class="add-btn" id="addPairBtn">+</div>
-  </div>
-</section>
+    <div id="playerGrid" class="grid-5"></div>
+  </section>
 
-<!-- FIXED PAIR MODAL -->
-<div id="pairModal" class="modal">
-  <div class="modal-content">
-    <h3>고정 페어 선택</h3>
-    <select id="pairSelect1"></select>
-    <select id="pairSelect2"></select>
-    <button id="confirmPairBtn">✔ 생성</button>
-  </div>
-</div>
+  <!-- GAME -->
+  <section class="section">
+    <div class="section-title">GAME</div>
+    <div class="grid-5">
+      <button class="btn game">GAME (1SET)</button>
+      <button class="btn game">GAME (2SET)</button>
+      <button class="btn game">GAME (3SET)</button>
+      <button class="btn game">GAME (4SET)</button>
+      <button class="btn game">GAME (5SET)</button>
+    </div>
+  </section>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
