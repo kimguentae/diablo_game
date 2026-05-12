@@ -9,7 +9,122 @@ body {
 h1 {
   text-align: center;
   font-size: 18px;
+}body {
+  margin: 0;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  font-family: sans-serif;
 }
+
+h1 {
+  text-align: center;
+  font-size: 18px;
+}
+
+h2 {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* =========================
+   5열 PLAYER
+========================= */
+#playerList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+/* =========================
+   PLAYER (완전 안정)
+========================= */
+.player {
+  background: #1c1c1c;
+  border-radius: 6px;
+  font-size: 10px;
+  text-align: center;
+  padding: 8px 2px;
+  border: 1px solid #222;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+
+  touch-action: none; /* 🔥 핵심 */
+
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.player:active {
+  transform: scale(0.92);
+}
+
+.player.active {
+  background: #00c853;
+  color: #000;
+}
+
+/* =========================
+   GUEST
+========================= */
+.player.guest {
+  border: 1px dashed #555;
+  color: #888;
+}
+
+/* =========================
+   GAME BUTTON
+========================= */
+.btnRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.genBtn {
+  font-size: 10px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  background: #2979ff;
+  color: white;
+}
+
+/* =========================
+   RESULT
+========================= */
+.result-set {
+  margin-top: 8px;
+  padding: 8px;
+  background: #111;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+/* =========================
+   COLOR DOT
+========================= */
+.player {
+  position: relative;
+}
+
+.player::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.player.red::after { background: red; }
+.player.blue::after { background: blue; }
+.player.green::after { background: green; }
+.player.yellow::after { background: yellow; }
+.player.purple::after { background: purple; }
 
 h2 {
   font-size: 12px;
