@@ -8,7 +8,6 @@ const names = [
   "이명진","전유준","성제현","장이현"
 ];
 
-// 선수
 const players = names.map(n => ({
   name: n,
   active: false
@@ -20,7 +19,7 @@ const listEl = document.getElementById("playerList");
 const resultEl = document.getElementById("result");
 
 /* =========================
-   UI 생성 (동그란 네모)
+   이름 카드 UI
 ========================= */
 players.forEach(p => {
   const div = document.createElement("div");
@@ -36,7 +35,7 @@ players.forEach(p => {
 });
 
 /* =========================
-   고정페어 (간단 prompt)
+   고정페어 (더블클릭)
 ========================= */
 listEl.ondblclick = () => {
   const a = prompt("첫 번째 이름");
@@ -45,11 +44,11 @@ listEl.ondblclick = () => {
   if (!a || !b) return;
 
   fixedPairs.push([a, b]);
-  alert(`고정페어 등록: ${a} - ${b}`);
+  alert(`고정페어: ${a} - ${b}`);
 };
 
 /* =========================
-   경기 생성 (1세트)
+   경기 자동편성 (1세트)
 ========================= */
 document.getElementById("generateBtn").onclick = () => {
   resultEl.innerHTML = "";
@@ -64,7 +63,7 @@ document.getElementById("generateBtn").onclick = () => {
   let used = new Set();
   let result = [];
 
-  // 고정페어 먼저
+  // 고정페어 우선
   fixedPairs.forEach(pair => {
     const p1 = available.find(p => p.name === pair[0]);
     const p2 = available.find(p => p.name === pair[1]);
